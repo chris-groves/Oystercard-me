@@ -15,11 +15,6 @@ describe Oystercard do
     expect { subject.top_up(5) }.to raise_error message
   end
 
-  it 'deducts a fare from the balance' do
-    subject.top_up(10)
-    expect { subject.deduct(5) }.to change { subject.balance }.by(-5)
-  end
-
   it 'has an intial status of "not in journey"' do
     expect(subject.in_journey).to eq false
   end
@@ -36,8 +31,12 @@ describe Oystercard do
   end
 
   it 'prevents touch in if balance is less than minimum amount' do
-    message = "Error: balance is below £#{Oystercard::MINUMUM_FARE}"
+    message = "Error: balance is below £#{Oystercard::MINIMUM_FARE}"
     expect { subject.touch_in }.to raise_error message
+  end
+
+  it 'reduces balance on touch out' do
+    expect { subject.touch_out }.to change { subject.balance}.by(-Oystercard::MINIMUM_FARE)
   end
 
 end
