@@ -21,15 +21,16 @@ class Oystercard
   def touch_in(station)
     raise "Error: balance is below £#{MINIMUM_FARE}" if @balance < MINIMUM_FARE
     @entry_station = station
+    @exit_station = nil
     @latest_journey[:entry_station] = station
   end
 
   def touch_out(station)
     deduct(MINIMUM_FARE)
-    @entry_station = nil
     @exit_station = station
     @latest_journey[:exit_station] = station
     @journey_history << @latest_journey
+    @entry_station = nil
   end
 
   def in_journey?
